@@ -60,7 +60,7 @@ def get_dataset(
         valid = fn_dataset("val")
         test = fn_dataset("test")
 
-        if name == "QM9" and split != "None":
+        if name == "QM9" and split != "None" and split!="":
             cur_split = int(split)
             train.data.y = train.data.y[:, cur_split]
             valid.data.y = valid.data.y[:, cur_split]
@@ -85,7 +85,11 @@ def get_dataset(
 
     if fn_dataset is not None:
         dataset = fn_dataset()
-
+        # Handle empty or invalid split
+        if not split or "_" not in split:
+            # Return whole dataset as train, empty valid/test
+            return dataset, dataset[:0], dataset[:0]
+    
         i = int(split.split("_")[0])
         total_split = int(split.split("_")[1])
 

@@ -1,6 +1,7 @@
 import os
 from plane.common_imports import *
 import wandb
+import torch
 
 
 def mytqdm(xs, *args, **kwargs):
@@ -127,6 +128,7 @@ class Trainer:
     def run(self):
         torch.manual_seed(self.exec_config.seed)
         self.state_path = f".model_state/{wandb.run.id}"
+        os.makedirs(os.path.dirname(self.state_path), exist_ok=True)  # Create the dir if it doesn't exist.
         self.model = self.get_model().to(self.exec_config.device)
         self.optimizer = self.get_optimizer(self.model)
         self.scheduler = self.get_scheduler(self.optimizer)

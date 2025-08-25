@@ -6,6 +6,16 @@ INF = 1e9
 
 SPQR_TYPE_DICT = {"S": 0, "P": 1, "Q": 0, "R": 2}
 
+# Utility function to safely lookup edge features
+def safe_edge_lookup(edge_feature_map, u, v):
+    """Safely lookup edge features handling both directions (u,v) and (v,u)"""
+    if (u, v) in edge_feature_map:
+        return edge_feature_map[(u, v)]
+    elif (v, u) in edge_feature_map:
+        return edge_feature_map[(v, u)]
+    else:
+        raise KeyError(f"Edge ({u}, {v}) not found in either direction")
+    
 
 class Data(tgdata.Data):
     """Definition of the data class for the PlanE"""
@@ -248,7 +258,7 @@ def process(data: tgdata.Data, directional_tree=True):
                             sub_id,
                             u,
                             v,
-                            edge_feature_map[(u, v)],
+                            safe_edge_lookup(edge_feature_map, u, v),
                             i,
                             spqr_code[i],
                         ]
