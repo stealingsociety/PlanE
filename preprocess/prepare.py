@@ -12,5 +12,6 @@ for dataset in [
     "ogbg_molhiv",
     "P3R",
     "EXP",
+    "MyDataset",
 ]:
     get_dataset(name=dataset, fn_final_transform=process)

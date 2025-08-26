@@ -14,7 +14,8 @@ parameters:
     value: "binary_thres_0_accuracy"
   metric_goal:
     value: "max"
-  
+
+ 
   epochs:
     value: 50
   batch_size:
@@ -45,13 +46,13 @@ parameters:
     value: "n_t_b_cr_gr"
   
   trainer_log_loss_freq:
-    value: 2
+    value: 1
   trainer_save_cp_freq:
     value: 1
   trainer_eval_train_freq:
-    value: -1
+    value: 1
   trainer_save_best_state:
-    value: "None"
+    value: "valid"
 
 command:
   - ${env}

@@ -53,6 +53,14 @@ def get_dataset(
                 root=root,
                 split=split,
                 pre_transform=pre_transform,
+            
+            )
+        case "MyDataset":
+            from datasets.mydataset import MyDataset
+            fn_dataset = lambda split: MyDataset(
+                root=root,
+                split=split,
+                pre_transform=pre_transform,
             )
 
     if fn_dataset is not None:
@@ -171,6 +179,12 @@ def get_dataset_info(name):
                 "dim_node_feature": [1],
                 "dim_edge_feature": "None",
                 "dim_output": 2,
+            }
+        case "MyDataset":
+            return {
+                "dim_node_feature": 1,
+                "dim_edge_feature": "None",
+                "dim_output": 1,
             }
         case _:
             raise Exception(f"Unknown Dataset {name}")

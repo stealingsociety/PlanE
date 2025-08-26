@@ -140,6 +140,13 @@ if __name__ == "__main__":
                 .mean()
                 .item()
             )
+        case "binary_thres_05_accuracy":
+            fn_metric = (
+                lambda pred, y: ((pred.flatten() > 0.5) == y.flatten())
+                .float()
+                .mean()
+                .item()
+            )
         case "multi_class_accuracy":
             fn_metric = (
                 lambda pred, y: ((pred.argmax(dim=-1)) == y.flatten())
