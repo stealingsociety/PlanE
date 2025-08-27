@@ -9,7 +9,7 @@ class MyDataset(tgdata.InMemoryDataset):
     def __init__(
         self, root, split, transform=None, pre_transform=None, pre_filter=None
     ):
-        self.json_gzip_path = f".dataset_src/den_graph_data_8_feature_{split}.json.gz"
+        self.json_gzip_path = f".dataset_src/den_graph_data_9_feature_{split}.json.gz"
         new_root = osp.join(root, split)
         super(MyDataset, self).__init__(
             new_root, transform, pre_transform, pre_filter
