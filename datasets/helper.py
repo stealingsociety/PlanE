@@ -182,7 +182,7 @@ def get_dataset_info(name):
             }
         case "MyDataset":
             return {
-                "dim_node_feature": 1,
+                "dim_node_feature": "lin",
                 "dim_edge_feature": "None",
                 "dim_output": 1,
             }

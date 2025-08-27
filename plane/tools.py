@@ -102,6 +102,7 @@ class Embedding(nn.Module):
         return self.embed(data)
 
 
+
 class Read(nn.Module):
     def __init__(self, mlp, masked=False):
         super().__init__()

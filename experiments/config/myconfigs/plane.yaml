@@ -1,4 +1,4 @@
-name: mydataset-plane
+name: mydataset-plane-7-loop-features
 program: experiments.main
 method: grid
 parameters:
@@ -18,7 +18,7 @@ parameters:
   epochs:
     value: 50
   batch_size:
-    value: 16
+    value: 32
   
   lr_start:
     values: [1e-3,1e-4]

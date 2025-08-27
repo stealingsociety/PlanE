@@ -22,7 +22,10 @@ class ModelGraph(nn.Module):
     def __init__(self, config: ModelConfig):
         super().__init__()
         self.config = config
+        print(f"Node feature config: {config.dim_node_feature}")
+        print(f"Node feature type: {type(config.dim_node_feature)}")
         self.embed_g = Embedding(config.dim_node_feature, config.dim)
+        print(f"Model embedding weight dtype: {next(self.embed_g.parameters()).dtype}")
         self.layers = nn.ModuleList(
             [get_layer(config) for _ in range(config.num_layers)]
         )
@@ -38,10 +41,8 @@ class ModelGraph(nn.Module):
 
     def forward(self, data):
         num_batch = data.num_graphs
-
         # Initialize node and edge feature
-        h_g = self.embed_g(data.x)
-
+        h_g = self.embed_g(data.x.float() if data.x.dtype in [torch.int, torch.long] else data.x)
         hist = []
         for i in range(self.config.num_layers):
             match self.config.flags_layer:
@@ -54,6 +55,7 @@ class ModelGraph(nn.Module):
 
             hist.append(h_g)
 
+    
         # Aggregate all node features from i-th layer to obtain a graph-level feature
         # Concat then MLP
         out = self.out_final(
