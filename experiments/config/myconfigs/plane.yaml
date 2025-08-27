@@ -29,16 +29,16 @@ parameters:
   model_flags_layer:
     value: "plane"
   model_num_layers:
-    values: [2,3]
+    value: 3
   model_dim_hidden:
-    values: [32,64]
+    value: 64
   model_final_act:
     value: "Identity"
 
   model_dropout:
     values: [0.2,0.3,0.4]
   model_dropout_loc:
-    value: "edg_com_out"
+    value: "agg_com_out_edg"
 
 
   plane_dim_pe:
