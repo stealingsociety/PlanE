@@ -9,7 +9,7 @@ class MyDataset(tgdata.InMemoryDataset):
     def __init__(
         self, root, split, transform=None, pre_transform=None, pre_filter=None
     ):
-        self.json_gzip_path = f".dataset_src/den_graph_data_7_feature_{split}.json.gz"
+        self.json_gzip_path = f".dataset_src/den_graph_data_8_feature_{split}.json.gz"
         new_root = osp.join(root, split)
         super(MyDataset, self).__init__(
             new_root, transform, pre_transform, pre_filter
@@ -32,7 +32,10 @@ class MyDataset(tgdata.InMemoryDataset):
             data_list_json = json.load(f)
             data_list = [
                 tgdata.Data(
-                    x=torch.tensor(data["x"], dtype=torch.float32),
+                    x=(
+                        (lambda x: (x - x.mean(dim=0, keepdim=True)) / (x.std(dim=0, keepdim=True) + 1e-6) if x.numel() > 0 else x)
+                        (torch.tensor(data["x"], dtype=torch.float32))
+                    ),
                     edge_index=torch.tensor(
                         data["edge_index"], dtype=torch.long
                     ),
@@ -49,7 +52,6 @@ class MyDataset(tgdata.InMemoryDataset):
 
         if self.pre_transform is not None:
             data_list = [self.pre_transform(data) for data in data_list]
-            print(f"After pre_transform x dtype: {data_list[0].x.dtype}")
         # Force x to be long dtype after preprocessing
         for data in data_list:
             if data.x is not None:

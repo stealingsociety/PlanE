@@ -2,7 +2,7 @@ import os
 from plane.common_imports import *
 import wandb
 import torch
-
+from sklearn.metrics import roc_auc_score
 
 def mytqdm(xs, *args, **kwargs):
     if os.uname().release[0] == "6":
@@ -110,7 +110,7 @@ class Trainer:
         self.model.eval()
         y_true = []
         y_pred = []
-
+        
         with torch.no_grad():
             for batch in mytqdm(loader, leave=False, desc=f"Eval {task}"):
                 pred = self.model(batch.to(self.exec_config.device))
@@ -119,8 +119,14 @@ class Trainer:
 
             y_true = torch.cat(y_true, dim=0)
             y_pred = torch.cat(y_pred, dim=0)
+                    # Always compute ROC AUC
+            from sklearn.metrics import roc_auc_score
+            try:
+                roc_auc = roc_auc_score(y_true.numpy(), y_pred.numpy())
+            except ValueError:
+                roc_auc = float('nan')  # Handle cases with single class in y_true
             metric = self.find_metric(y_pred, y_true)
-            return metric
+            return metric, roc_auc
 
     def to_device(self, datalist):
         return [data.to(self.exec_config.device) for data in datalist]
@@ -199,16 +205,17 @@ class Trainer:
                 print(f"Trainable Parameters: {p}")
                 wandb.run.summary["param"] = p
 
+            train_metric, train_roc_auc = self.evaluate_model(train_loader, "train")
+            valid_metric, valid_roc_auc = self.evaluate_model(valid_loader, "valid")
+            test_metric, test_roc_auc = self.evaluate_model(test_loader, "test")
             cur_metric = {
                 "epoch": epoch,
-                "train": (
-                    self.evaluate_model(train_loader, "train")
-                    if self.exec_config.eval_train_freq > 0
-                    and epoch % self.exec_config.eval_train_freq == 0
-                    else -100
-                ),
-                "valid": self.evaluate_model(valid_loader, "valid"),
-                "test": self.evaluate_model(test_loader, "test"),
+                "train": train_metric,
+                "train_roc_auc": train_roc_auc,
+                "valid": valid_metric,
+                "valid_roc_auc": valid_roc_auc,
+                "test": test_metric,
+                "test_roc_auc": test_roc_auc,
                 "lr": self.optimizer.param_groups[0]["lr"],
             }
 

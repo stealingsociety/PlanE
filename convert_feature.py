@@ -11,7 +11,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 
 # Directory where .npy node features are stored
-FEATURE_DIR = ".dataset_src/features_loop_7"
+FEATURE_DIR = ".dataset_src/features_loop_8"
 FEATURE_NAMES = ["closeness", "degree", "betweenness", "clustering", "pagerank", "face_count"]
 
 def load_features(num_graphs):

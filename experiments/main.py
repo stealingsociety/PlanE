@@ -28,7 +28,7 @@ def fn_get_model():
 
 
 def fn_get_optimizer(model):
-    return torch.optim.Adam(model.parameters(), lr=arg.lr_start)
+    return torch.optim.Adam(model.parameters(), lr=arg.lr_start, weight_decay=arg.w_decay)
 
 
 def fn_get_scheduler(optimizer):
@@ -76,6 +76,7 @@ if __name__ == "__main__":
 
     parser.add_argument("--lr_start", type=float)
     parser.add_argument("--lr_scheduler", type=str)
+    parser.add_argument("--w_decay", type=float)
 
     parser.add_argument("--model_flags_layer", type=str)
     parser.add_argument("--model_num_layers", type=int)

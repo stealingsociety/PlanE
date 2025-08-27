@@ -1,11 +1,11 @@
-name: mydataset-plane-7-loop-features
+name: mydataset-plane-8-loop-features
 program: experiments.main
 method: grid
 parameters:
   dataset:
     value: "MyDataset"
   cur_seed:
-    values: [3,4]
+    value: 4
   cur_split:
     value: "None"
   fn_loss:
@@ -21,23 +21,24 @@ parameters:
     value: 32
   
   lr_start:
-    values: [1e-3,1e-4]
+    values: [1e-4, 5e-4]
   lr_scheduler:
     value: "valid"
-
+  w_decay:
+    values: [1e-5, 5e-5]
   model_flags_layer:
     value: "plane"
   model_num_layers:
-    value: 2
+    values: [2,3]
   model_dim_hidden:
-    value: 32
+    values: [32,64]
   model_final_act:
     value: "Identity"
 
   model_dropout:
-    values: [0.2,0.3,0.5]
+    values: [0.2,0.3,0.4]
   model_dropout_loc:
-    values: ["edg_agg_out", "edg_com_out","enc_edg_com_out","enc_edg_com_agg_out"]
+    value: "edg_com_out"
 
 
   plane_dim_pe:
